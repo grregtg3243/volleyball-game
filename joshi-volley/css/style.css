@@ -1,0 +1,41 @@
+/* 水色・青基調 / ときめき風UI */
+:root{--sky1:#d8f0ff;--sky2:#8fd0f5;--navy:#14487a;--blue:#2a8fe0;--pale:#eaf6ff;--pink:#ff6f9a;--ink:#16324d;--win:#ffffffee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky1:#244a6e;--sky2:#17395a;--navy:#9bd0ff;--pale:#102a44;--ink:#e6f3ff;--win:#12304dee}}
+:root[data-theme="dark"]{--sky1:#244a6e;--sky2:#17395a;--navy:#9bd0ff;--pale:#102a44;--ink:#e6f3ff;--win:#12304dee}
+*{box-sizing:border-box}body{margin:0;background:var(--pale);color:var(--ink);font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;line-height:1.6}
+main{max-width:880px;margin:0 auto;padding:10px}
+.top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;background:linear-gradient(90deg,var(--blue),#5ec2ff);color:#fff;border-radius:12px 12px 0 0;padding:8px 14px;font-weight:700;border:3px solid #fff;box-shadow:0 0 0 2px var(--blue)}
+.game{display:grid;grid-template-columns:1fr 240px;gap:10px;margin-top:10px}
+@media(max-width:700px){.game{grid-template-columns:1fr}}
+.stage{position:relative;min-height:380px;border-radius:12px;overflow:hidden;border:3px solid #fff;box-shadow:0 0 0 2px var(--blue);background:linear-gradient(#bfe6ff,var(--sky1) 55%,var(--sky2) 55%,#6bb7e6)}
+.pt{position:absolute;left:50%;bottom:92px;width:210px;transform:translateX(-50%);z-index:2}.pt svg,.pt img{width:100%;display:block}
+.name{position:absolute;left:10px;top:10px;z-index:3;background:var(--win);border:2px solid var(--blue);border-radius:8px;padding:4px 10px;font-weight:700}.name small{display:block;font-weight:400;font-size:.75rem}
+.heart{position:absolute;right:10px;top:10px;z-index:3;background:var(--win);border:2px solid var(--pink);border-radius:8px;padding:4px 10px;font-size:.85rem}
+.hb{width:90px;height:8px;background:#ffd5e2;border-radius:4px;overflow:hidden}.hb i{display:block;height:100%;background:var(--pink)}
+.say{position:absolute;left:8px;right:8px;bottom:8px;z-index:4;background:var(--win);border:3px solid var(--blue);border-radius:12px;padding:8px 12px;min-height:76px}.say b{color:var(--navy);display:block;font-size:.85rem}
+.nav{position:absolute;top:45%;z-index:3;width:44px;height:44px;border-radius:50%;border:2px solid var(--blue);background:var(--win);color:var(--navy);font-size:1rem;cursor:pointer}.nav.l{left:8px}.nav.r{right:8px}
+.box{background:var(--win);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue);border-radius:12px;padding:8px}
+.st{display:grid;grid-template-columns:auto 1fr 26px;gap:2px 6px;font-size:.78rem;align-items:center}
+.t{height:7px;background:#b9dcf2;border-radius:4px;overflow:hidden}.t i{display:block;height:100%;background:var(--blue)}
+.cmd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cmd button{font:inherit;font-weight:700;border:2px solid var(--blue);background:linear-gradient(#fff,#d6eeff);color:#14487a;border-radius:12px;padding:10px 6px;min-height:48px;cursor:pointer}
+.cmd button:hover{background:var(--blue);color:#fff}.cmd button.p{background:linear-gradient(#ff9bb8,var(--pink));color:#fff;border-color:var(--pink)}
+button:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+#panel{display:none;margin-top:10px}#panel h2{margin:0 0 8px;color:var(--navy);font-size:1.1rem}#panel h3{margin:12px 0 4px;font-size:.95rem;color:var(--navy)}
+.ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.ac{display:grid;grid-template-columns:70px 1fr;gap:8px;background:var(--pale);border-radius:10px;padding:8px;font-size:.8rem;border:0;text-align:left;color:var(--ink);font-family:inherit}
+.ac svg,.ac img{width:70px}.ac b{font-size:.95rem}button.ac{cursor:pointer}button.ac.on{outline:3px solid var(--pink)}
+.ach{display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;background:var(--pale);margin:4px 0;font-size:.85rem}.ach.lock{opacity:.5}.ach i{font-style:normal;font-size:1.3rem}
+.set button,.set label.b{font:inherit;border:2px solid var(--blue);background:var(--pale);color:var(--ink);border-radius:10px;padding:8px 12px;margin:3px 3px 3px 0;cursor:pointer;display:inline-block}
+.set input[type=range]{width:min(260px,100%);vertical-align:middle}.hint{font-size:.78rem;opacity:.8}
+details{margin-top:10px;font-size:.88rem}#hist{max-height:180px;overflow:auto}#hist p{margin:3px 0}#hist .big{font-weight:700;color:var(--navy)}#hist .love{color:#d6396b}
+/* 月替わり演出 */
+#bn{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a8fe0,#8fd8ff);color:#fff;text-align:center}
+#bn.on{display:flex;animation:bn 1.6s forwards}#bn span{display:block;font-size:clamp(1.8rem,8vw,3.2rem);font-weight:800}#bn small{font-size:1rem}
+@keyframes bn{0%{opacity:0}15%,80%{opacity:1}100%{opacity:0}}
+/* ノベルパート */
+#nv{position:fixed;inset:0;z-index:40;display:none;background:linear-gradient(#bfe6ff,#8fd0f5);cursor:pointer}#nv.on{display:block}
+.nvp{position:absolute;left:50%;bottom:150px;width:min(240px,60vw);transform:translateX(-50%)}.nvp svg,.nvp img{width:100%;display:block}
+.nvb{position:absolute;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));background:var(--win);color:var(--ink);border:3px solid var(--blue);border-radius:14px;padding:10px 14px;min-height:120px}.nvb b{color:var(--navy)}.nvb p{margin:4px 0}.nvb small{opacity:.6}
+#toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-140%);transition:transform .3s;z-index:60;background:var(--navy);color:#fff;border-radius:20px;padding:8px 16px;font-size:.88rem}#toast.on{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){#bn.on{animation:none}#toast{transition:none}}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a8fe0"><title>女子バレー物語</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon.svg">
+<link rel="stylesheet" href="css/style.css"></head><body><main>
+<!-- 上部バー：タイトル・時期・行動力・モテ度 -->
+<div class="top"><span>女子バレー物語</span><span id="wk"></span><span id="ap"></span><span id="pop"></span></div>
+<!-- ゲーム画面：ステージ（立ち絵・セリフ）＋ステータス -->
+<div class="game" id="game">
+ <div class="stage"><button class="nav l" onclick="step(-1)" aria-label="前の部員">◀</button><button class="nav r" onclick="step(1)" aria-label="次の部員">▶</button>
+  <div class="name" id="nm"></div><div class="heart" id="ht"></div><div class="pt" id="pt"></div><div class="say" id="say"></div></div>
+ <div class="side"><div class="box" id="stats"></div></div>
+</div>
+<!-- 部員・アルバム・実績・設定のパネル -->
+<div class="box" id="panel"></div>
+<div class="cmd" id="cmd"></div>
+<details><summary>これまでのログ</summary><div id="hist"></div></details>
+</main>
+<!-- ノベルパート／月替わり演出／通知 -->
+<div id="nv" onclick="Novel.next()"><div class="nvp" id="nvp"></div><div class="nvb"><b id="nvw"></b><p id="nvt"></p><small>タップで次へ</small></div></div>
+<div id="bn"><div><span id="bn1"></span><small id="bn2"></small></div></div><div id="toast" role="status"></div>
+<!-- 読み込み順：データ → セーブ → 音 → 立ち絵 → ノベル → 本体 -->
+<script src="js/data.js"></script><script src="js/save.js"></script><script src="js/audio.js"></script>
+<script src="js/art.js"></script><script src="js/novel.js"></script><script src="js/game.js"></script>
+</body></html>
