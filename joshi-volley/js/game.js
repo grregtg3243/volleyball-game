@@ -10,9 +10,9 @@ const lineup=()=>[...S.M].sort((a,b)=>avg(b)-avg(a)).slice(0,8);       // 試合
 const power=()=>Math.round(lineup().reduce((a,m)=>a+avg(m)*(.6+m.mood/250),0));
 const endTxt=l=>l>=95?"卒業の日、先生に想いを告げた。":l>=80?"卒業後も会う約束を交わした。":l>=60?"感謝の言葉を残して巣立った。":"笑顔で巣立っていった。";
 /* ---------- 状態 ---------- */
-function mk(c){return{n:c.n,g:c.g,pos:c.pos,hair:c.hair,eye:c.eye,style:c.style,no:++S.no,s:{srv:c.s[0],rcv:c.s[1],atk:c.s[2],stm:c.s[3]},mood:c.mood,love:CFG.START,ev:[],L:c.L||DL,img:c.img||""}}
+function mk(c){return{n:c.n,g:c.g,pos:c.pos,hair:c.hair,eye:c.eye,style:c.style,no:++S.no,s:{srv:c.s[0],rcv:c.s[1],atk:c.s[2],stm:c.s[3]},mood:c.mood,love:c.love??CFG.START,ev:CFG.TIER.map(t=>(c.love??0)>=t?1:0),L:c.L||DL,img:c.img||""}}
 function fresh(){const all=[...S.M,...S.A];let n;do{n=pk(POOL.sn)+" "+pk(POOL.gn)}while(all.some(x=>x.n===n));
- return mk({n,g:1,pos:pk(POOL.ps),hair:pk(POOL.hc),eye:pk(POOL.ec),style:pk(POOL.st),s:[rnd(20,32),rnd(20,32),rnd(15,30),rnd(25,35)],mood:70})}
+ return mk({n,g:1,pos:pk(POOL.ps),hair:pk(POOL.hc),eye:pk(POOL.ec),style:pk(POOL.st),s:[rnd(20,32),rnd(20,32),rnd(15,30),rnd(25,35)],mood:70,love:rnd(35,85)})}
 function newGame(){S={no:0,y:1,w:1,ap:3,wins:0,weeks:0,cur:0,A:[],ach:{},fl:{}};S.M=CAST.map(mk)}
 /* ---------- 表示補助 ---------- */
 function say(t,who="",c=""){$("say").innerHTML=`<b>${who||"顧問"}</b>${t}`;const p=document.createElement("p");p.className=c;p.textContent=(who?who+" ":"")+t;$("hist").prepend(p)}
@@ -22,11 +22,10 @@ function checkAch(){ACH.forEach(a=>{if(!S.ach[a.id]&&a.ok(S)){S.ach[a.id]=1;toas
 /* ---------- 画面 ---------- */
 function draw(){
  if(S.cur>=S.M.length)S.cur=0;const m=S.M[S.cur];
- $("wk").textContent=`${S.y}年目 ${S.w}か月目`;$("ap").textContent=`行動 ${S.ap}/3`;$("pop").textContent=`モテ度 ${S.M.reduce((a,x)=>a+x.love,0)}`;
+ $("wk").textContent=`${S.y}年目 ${S.w}か月目`;$("ap").textContent=`行動 ${S.ap}/3`;$("pop").textContent=`ハーレム ${hc()}人（${rank(hc())}）`;
  $("nm").innerHTML=`${m.n}<small>短大${m.g}年・${m.pos}</small>`;
- $("ht").innerHTML=`♥ 好感度 ${m.love}<div class="hb"><i style="width:${m.love}%"></i></div>`;
  $("pt").innerHTML=art(m);
- $("stats").innerHTML=`<div class="st">${K.map((k,j)=>`<span>${NM[j]}</span><div class="t"><i style="width:${m.s[k]}%"></i></div><span>${m.s[k]}</span>`).join("")}<span>やる気</span><div class="t"><i style="width:${m.mood}%"></i></div><span>${m.mood}</span></div><p class="hint">部員 ${S.M.length}人／チーム力 ${power()}</p>`;
+ $("side").innerHTML=`<h3>${m.n}</h3><p class="hint">短大${m.g}年・${m.pos}</p><div class="st">${K.map((k,j)=>`<span>${NM[j]}</span><div class="t"><i style="width:${m.s[k]}%"></i></div><b>${m.s[k]}</b>`).join("")}<span>やる気</span><div class="t"><i style="width:${m.mood}%"></i></div><b>${m.mood}</b></div><div class="love"><span>♥ 顧問への愛</span><b>${m.love}</b><div class="lb"><i style="width:${m.love}%"></i></div></div><p class="hint">部員 ${S.M.length}人／チーム力 ${power()}</p>`;
  const pn=["roster","album","ach","set"].includes(menu);$("game").style.display=pn?"none":"grid";$("panel").style.display=pn?"block":"none";
  if(pn)$("panel").innerHTML=panel();
  const B=(t,f,c="")=>`<button class="${c}" onclick="${f}">${t}</button>`;
@@ -39,7 +38,7 @@ function panel(){
  if(menu==="roster")return `<h2>👭 部員（${S.M.length}人）</h2><div class="ag">${S.M.map((x,i)=>`<button class="ac ${i===S.cur?"on":""}" onclick="pick(${i})">${art(x)}<div><b>${x.n}</b><br>短大${x.g}年・${x.pos}<br>サーブ${x.s.srv} レシーブ${x.s.rcv}<br>スパイク${x.s.atk} 体力${x.s.stm}<br>♥ ${x.love}　やる気 ${x.mood}</div></button>`).join("")}</div>`;
  if(menu==="album")return `<h2>🎓 卒業アルバム</h2>`+(S.A.length?`<div class="ag">${[...S.A].reverse().map(a=>`<div class="ac">${art(a)}<div><b>${a.n}</b><br>${a.pos}／${a.yr}年目に卒業<br>サーブ${a.s.srv} レシーブ${a.s.rcv}<br>スパイク${a.s.atk} 体力${a.s.stm}<br>♥ 好感度 ${a.love}<br>${endTxt(a.love)}</div></div>`).join("")}</div>`:"まだ卒業生はいません。");
  if(menu==="ach"){const n=ACH.filter(a=>S.ach[a.id]).length;return `<h2>🏅 実績（${n}/${ACH.length}）</h2>`+ACH.map(a=>`<div class="ach ${S.ach[a.id]?"":"lock"}"><i>${S.ach[a.id]?a.i:"🔒"}</i><div><b>${a.n}</b><br>${a.d}</div></div>`).join("")}
- const c=Cfg.get();return `<div class="set"><h2>⚙ 設定</h2><h3>効果音</h3><input type="range" min="0" max="100" value="${c.vol*100}" aria-label="音量" onchange="setVol(this.value)"> <label class="b"><input type="checkbox" ${c.mute?"":"checked"} onchange="Cfg.set({mute:!this.checked})"> 鳴らす</label>
+ const c=Cfg.get();return `<div class="set"><h2>⚙ 設定</h2><h3>BGM</h3><input type="range" min="0" max="100" value="${c.bgm*100}" aria-label="BGM音量" onchange="Cfg.set({bgm:this.value/100});Bgm.set()"> <label class="b"><input type="checkbox" ${c.bgmMute?"":"checked"} onchange="Cfg.set({bgmMute:!this.checked});Bgm.set()"> 流す</label><h3>効果音</h3><input type="range" min="0" max="100" value="${c.vol*100}" aria-label="音量" onchange="setVol(this.value)"> <label class="b"><input type="checkbox" ${c.mute?"":"checked"} onchange="Cfg.set({mute:!this.checked})"> 鳴らす</label>
  <h3>セーブデータ</h3><p class="hint">進行は自動で保存されます。機種変更やバックアップには書き出しを使ってください。</p>
  <button onclick="Save.export(S);toast('書き出しました')">書き出し</button><label class="b">読み込み<input type="file" accept=".json,application/json" hidden onchange="importSave(this.files[0])"></label><button onclick="resetGame()">最初からやり直す</button>
  <h3>アプリ</h3><button onclick="install()">ホーム画面にインストール</button><p class="hint">iPhone: Safariの共有メニュー→「ホーム画面に追加」／Android: ブラウザのメニュー→「アプリをインストール」。※https または localhost で開いた場合に有効です。</p></div>`}
@@ -52,9 +51,16 @@ function team(j){if(!spend())return;S.M.forEach(m=>{m.s[K[j]]=cl(m.s[K[j]]+3+rnd
 function coach(j){if(!spend())return;const m=S.M[S.cur];m.s[K[j]]=cl(m.s[K[j]]+7+rnd(0,3));gain(m,3);m.mood=cl(m.mood-2);say(`「先生、ありがとうございます! ${NM[j]}、伸びた気がします!」`,m.n,"love");Snd.play("love");menu="main";after()}
 function talk(){if(!spend())return;const m=S.M[S.cur];gain(m,5);m.mood=cl(m.mood+15);say("「話を聞いてもらえて、心が軽くなりました。」",m.n,"love");Snd.play("love");after()}
 function meet(){if(!spend())return;S.M.forEach(m=>{m.mood=cl(m.mood+8);gain(m,1)});say("全体ミーティングで、チームの雰囲気が良くなった。");Snd.play("ok");after()}
+/* ハーレム（好感度80以上の人数）と嫉妬・イベント */
+const hc=()=>S.M.filter(m=>m.love>=80).length;
+const rank=n=>n>=6?"大ハーレム王":n>=4?"ハーレム":n>=2?"モテ期":n>=1?"本命候補":"修行中";
+function haremCheck(){const out=[],top=S.M.filter(m=>m.love>=80).sort((a,b)=>b.love-a.love);
+ HAREM.forEach(h=>{if(top.length>=h.n&&!S.fl["h"+h.n]){S.fl["h"+h.n]=1;hist(`★ハーレムイベント：${h.title}`);out.push(...SCENES.harem(top,h))}});return out}
+function jealous(){if(hc()<2||Math.random()>.25)return;const t=S.M.filter(m=>m.love>=80),a=pk(t),b=pk(t.filter(x=>x!==a));
+ say(`${a.n}と${b.n}が、顧問の隣をめぐって火花を散らしている…。`,"","love");gain(a,2);gain(b,2);a.mood=cl(a.mood-5);b.mood=cl(b.mood-5)}
 function after(){ // 恋愛イベント判定→ノベルパート
  let sc=[];S.M.forEach(m=>{if(m.love>=95)S.fl.love95=1;CFG.TIER.forEach((t,i)=>{if(m.love>=t&&!m.ev[i]){m.ev[i]=1;S.cur=S.M.indexOf(m);hist(`★${m.n}の恋愛イベント`);sc.push(...SCENES.love(m,i))}})});
- checkAch();Save.write(S);draw();if(sc.length){Snd.play("love");Novel.play(sc)}}
+ sc.push(...haremCheck());checkAch();Save.write(S);draw();if(sc.length){Snd.play("love");Novel.play(sc)}}
 function hist(t){const p=document.createElement("p");p.className="big";p.textContent=t;$("hist").prepend(p)}
 function graduate(){ // 3年生が卒業→進級→新入部員
  const out=S.M.filter(m=>m.g>=3),L=[];out.forEach(m=>{S.A.push({...m,s:{...m.s},yr:S.y});L.push(...SCENES.grad(m))});
@@ -66,6 +72,7 @@ function endWeek(){
  if(r<.35){gain(m,4);say("「先生、差し入れです。みんなには内緒ですよ?」",m.n,"love")}
  else if(r<.55){m.mood=cl(m.mood-10);say("調子を落としている様子だ。声をかけてあげよう。",m.n)}
  else if(r<.75){gain(m,3);say(`OGから、顧問と${m.n}の仲を冷やかされた。モテ度が上がった。`,"","love")}
+ jealous();
  if(S.w%4===0){const o=(70+S.w*7)*2+Math.min((S.y-1)*30,360)+rnd(0,40),p=power()+rnd(0,40),w=p>=o; // 大会は4か月ごと
   say(`大会 チーム力${p} 対 相手${o} → ${w?"勝利!":"惜敗…"}`,"","big");Snd.play(w?"win":"lose");
   if(w){S.wins++;S.M.forEach(x=>{x.mood=cl(x.mood+12);gain(x,2)})}else S.M.forEach(x=>x.mood=cl(x.mood-8))}
@@ -83,4 +90,4 @@ function install(){if(dip){dip.prompt();dip=null}else toast("下の案内のと�
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();dip=e});
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(()=>{});
 /* ---------- 起動 ---------- */
-(()=>{const d=Save.load();if(d){S=d;say("おかえりなさい、顧問。続きからはじめましょう。")}else{newGame();say("新年度、短大女子バレー部の顧問に着任した。まずは部員と向き合おう。")}checkAch();draw()})();
+(()=>{const d=Save.load();if(d){S=d;say("おかえりなさい、顧問。続きからはじめましょう。")}else{newGame();say("新年度、短大女子バレー部の顧問に着任した。まずは部員と向き合おう。")}checkAch();draw();Bgm.play("main")})();
