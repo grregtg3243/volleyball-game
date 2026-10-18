@@ -1,0 +1,64 @@
+/* 水色基調・ガラス調UI。色は :root の変数で一括変更できます */
+:root{--sky:#62c9ff;--deep:#0a3d6b;--cyan:#1fd1ee;--love:#ff3558;--ink:#0d2b47;--mute:#4d6c86;--glass:rgba(255,255,255,.62);--edge:rgba(255,255,255,.95);--chip:rgba(10,61,107,.1);--bg:linear-gradient(165deg,#e6f7ff 0%,#a6defc 52%,#5db3ee 100%);--shadow:0 12px 32px rgba(6,40,74,.18);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--deep:#bfe6ff;--ink:#e8f6ff;--mute:#9cc4e0;--glass:rgba(8,36,68,.66);--edge:rgba(120,200,255,.35);--chip:rgba(150,210,255,.15);--bg:linear-gradient(165deg,#06203a,#0a3560 60%,#0e4a80)}}
+:root[data-theme="dark"]{--deep:#bfe6ff;--ink:#e8f6ff;--mute:#9cc4e0;--glass:rgba(8,36,68,.66);--edge:rgba(120,200,255,.35);--chip:rgba(150,210,255,.15);--bg:linear-gradient(165deg,#06203a,#0a3560 60%,#0e4a80)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg) fixed;color:var(--ink);font-family:"Hiragino Sans","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;line-height:1.6}
+main{max-width:920px;margin:0 auto;padding:12px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px 16px;flex-wrap:wrap;padding:10px 18px;margin-bottom:12px;color:#fff;font-weight:700;background:linear-gradient(100deg,#0a3d6b,#1b7fe0 60%,#38d6ff);clip-path:polygon(0 0,100% 0,calc(100% - 16px) 100%,0 100%);box-shadow:var(--shadow)}
+.logo{font-size:1.15rem;font-weight:900;letter-spacing:.12em}
+/* 立ち絵フレームとステータスフレームは同じ .frame で枠を統一 */
+.frame{position:relative;overflow:hidden;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--edge);border-radius:20px;box-shadow:var(--shadow)}
+.frame:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;z-index:6;background:linear-gradient(90deg,var(--cyan),var(--sky),transparent)}
+.game{display:grid;grid-template-columns:1fr 250px;gap:12px;align-items:stretch}
+@media(max-width:700px){.game{grid-template-columns:1fr}}
+.stage{min-height:580px;background:linear-gradient(#eaf8ff,#b8e4fc)}   /* シンプルな単色グラデーション（床・ライト等の飾りは廃止） */
+.pt{position:absolute;left:50%;bottom:96px;width:min(310px,72%);transform:translateX(-50%);z-index:2;filter:drop-shadow(0 10px 14px rgba(6,40,74,.35))}.pt svg,.pt img{width:100%;display:block}
+.name{position:absolute;left:0;top:14px;z-index:3;padding:6px 26px 6px 16px;color:#fff;font-weight:800;background:linear-gradient(90deg,#0a3d6b,#1b7fe0);clip-path:polygon(0 0,100% 0,calc(100% - 14px) 100%,0 100%)}.name small{display:block;font-weight:500;font-size:.72rem;opacity:.9}
+.say{position:absolute;left:10px;right:10px;bottom:10px;z-index:4;min-height:80px;padding:10px 16px;color:#fff;background:rgba(6,40,74,.8);backdrop-filter:blur(6px);border-radius:14px;border-top:2px solid var(--cyan)}.say b{display:block;font-size:.82rem;color:#7fe3ff}
+.nav{position:absolute;top:44%;z-index:3;width:44px;height:44px;border-radius:50%;border:1px solid var(--edge);background:var(--glass);color:var(--deep);cursor:pointer;backdrop-filter:blur(6px)}.nav.l{left:10px}.nav.r{right:10px}
+.side{padding:20px 16px 14px;display:flex;flex-direction:column;gap:12px}.side h3{margin:0;font-size:1.3rem;color:var(--deep);line-height:1.2}
+.st{display:grid;grid-template-columns:auto 1fr 30px;gap:9px 8px;font-size:.84rem;align-items:center;font-weight:700}.st b{text-align:right}
+.t{height:10px;background:var(--chip);border-radius:6px;overflow:hidden}.t i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--sky))}
+.love{display:grid;grid-template-columns:1fr auto;gap:5px 8px;align-items:center;font-weight:800;color:var(--love)}
+.lb{grid-column:1/-1;height:16px;border-radius:8px;background:rgba(255,53,88,.18);overflow:hidden}.lb i{display:block;height:100%;background:linear-gradient(90deg,#ff8da0,var(--love));box-shadow:0 0 12px rgba(255,53,88,.6)}
+.hint{margin:0;font-size:.78rem;color:var(--mute)}.side .hint:last-child{margin-top:auto}
+.cmd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cmd button{font:inherit;font-weight:800;letter-spacing:.04em;color:#0a3d6b;border:0;min-height:54px;padding:10px 8px;cursor:pointer;background:linear-gradient(180deg,#fff,#cdeeff);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:filter .15s,transform .1s}
+.cmd button:hover{filter:brightness(1.06) saturate(1.25);transform:translateY(-1px)}.cmd button:focus-visible{background:var(--cyan);color:#fff}
+.cmd button.p{color:#fff;background:linear-gradient(180deg,#38d6ff,#1b7fe0)}
+#panel{display:none;margin-top:12px;padding:18px 16px 14px}#panel h2{margin:0 0 10px;color:var(--deep);font-size:1.15rem}#panel h3{margin:14px 0 4px;font-size:.95rem;color:var(--deep)}
+.ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.ac{display:grid;grid-template-columns:70px 1fr;gap:10px;background:var(--chip);border-radius:12px;padding:8px;font-size:.8rem;border:0;text-align:left;color:var(--ink);font-family:inherit}.ac svg,.ac img{width:70px}.ac b{font-size:.95rem}
+button.ac{cursor:pointer}button.ac.on,button.ac:focus-visible{outline:3px solid var(--cyan)}
+.ach{display:flex;gap:12px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--chip);margin:5px 0;font-size:.85rem}.ach.lock{opacity:.5}.ach i{font-style:normal;font-size:1.4rem}
+.set button,.set label.b{font:inherit;border:1px solid var(--edge);background:var(--chip);color:var(--ink);border-radius:10px;padding:8px 14px;margin:3px 4px 3px 0;cursor:pointer;display:inline-block}
+.set input[type=range]{width:min(260px,100%);vertical-align:middle;accent-color:var(--cyan)}
+details{margin-top:12px;font-size:.88rem}summary{cursor:pointer}#hist{max-height:180px;overflow:auto}#hist p{margin:3px 0}#hist .big{font-weight:700;color:var(--deep)}#hist .love{color:var(--love)}
+#bn{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;text-align:center;color:#fff;background:repeating-linear-gradient(115deg,rgba(255,255,255,.08) 0 24px,transparent 24px 48px),linear-gradient(135deg,#0a3d6b,#1b7fe0 55%,#38d6ff)}
+#bn.on{display:flex;animation:bn 1.6s forwards}#bn span{display:block;font-size:clamp(2rem,9vw,3.6rem);font-weight:900;letter-spacing:.1em}#bn small{font-size:1rem;letter-spacing:.2em}
+@keyframes bn{0%{opacity:0}15%,80%{opacity:1}100%{opacity:0}}
+#nv{position:fixed;inset:0;z-index:40;display:none;cursor:pointer;background:radial-gradient(ellipse at 50% 40%,#fff9,#fff0 60%),linear-gradient(#c4ecff,#5db3ee)}#nv.on{display:block}
+.nvp{position:absolute;left:50%;bottom:150px;width:min(320px,62vw);transform:translateX(-50%);filter:drop-shadow(0 10px 14px rgba(6,40,74,.35))}.nvp svg,.nvp img{width:100%;display:block}
+.nvb{position:absolute;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));min-height:120px;padding:12px 16px;color:#fff;background:rgba(6,40,74,.85);border-radius:16px;border-top:2px solid var(--cyan)}.nvb b{color:#7fe3ff}.nvb p{margin:4px 0}.nvb small{opacity:.6}
+#toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-140%);transition:transform .3s;z-index:60;background:#0a3d6b;color:#fff;border-radius:20px;padding:8px 18px;font-size:.88rem;box-shadow:var(--shadow)}#toast.on{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){#bn.on{animation:none}#toast,.cmd button{transition:none}}
+
+/* 独占欲(紫)・情欲(桃) のゲージ、顧問パネル */
+.love.v{color:#7c4ddb}.love.v .lb{background:rgba(139,92,246,.18)}.love.v .lb i{background:linear-gradient(90deg,#b79cff,#8b5cf6);box-shadow:0 0 12px rgba(139,92,246,.6)}
+.love.l{color:#d6338f}.love.l .lb{background:rgba(214,51,143,.18)}.love.l .lb i{background:linear-gradient(90deg,#ff9fd0,#d6338f);box-shadow:0 0 12px rgba(214,51,143,.6)}
+.boss{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}.sil svg{width:120px;display:block}
+.t.pop i{background:linear-gradient(90deg,#ffb347,#ff6b3d)}span.pop{color:#e0562b;font-weight:900}
+
+.id{font-style:normal;font-size:.62rem;font-weight:500;letter-spacing:.06em;opacity:.55;margin-left:6px}
+.set input.txt{font:inherit;padding:8px 12px;border-radius:10px;border:1px solid var(--edge);background:var(--chip);color:var(--ink);width:min(220px,60%)}
+.cmd button:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.4);transform:none}
+.ac button.mini{font:inherit;font-size:.78rem;border:1px solid var(--edge);background:var(--glass);color:var(--ink);border-radius:8px;padding:4px 10px;margin-top:4px;cursor:pointer}
+.nvb button{font:inherit;margin:6px 6px 0 0;padding:8px 14px;border-radius:10px;border:1px solid var(--cyan);background:rgba(255,255,255,.12);color:#fff;cursor:pointer}.nvb button:disabled{opacity:.4;cursor:not-allowed}.nvb button:hover:not(:disabled){background:var(--cyan);color:#06284a}
+.fans{position:absolute;right:12px;top:14px;z-index:3;padding:4px 12px;border-radius:14px;font-size:.78rem;font-weight:800;color:#fff;background:linear-gradient(90deg,#ff6f9a,#ff3558);box-shadow:0 4px 12px rgba(255,53,88,.35)}.fans:empty{display:none}
+
+.back{display:none}   /* 立ち絵の背後に並べる女子は廃止（中身は空） */
+/* ノベルで3人以上が登場する場面：立ち絵を横一列に並べる（engine.js の Novel.show が .wide を付ける） */
+.nvp.wide{width:min(900px,96vw);height:min(48vh,380px)}
+.msrow{display:flex;align-items:flex-end;justify-content:center;gap:2px;width:100%;height:100%}
+.msrow>div{flex:1 1 0;min-width:0;max-width:200px;height:100%;display:flex;align-items:flex-end;justify-content:center}
+.msrow svg,.msrow img{height:100%;width:auto;max-width:100%;display:block}
